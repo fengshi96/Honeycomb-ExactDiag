@@ -3,18 +3,18 @@ using LinearAlgebra
 function Honeycomb(LLX, LLY, BC::String = "OBC")
 
 	#LLX = 2; LLY = 2
-	Nsite = LLX * LLY * 2
-	number1neigh = 3
-	println("creating Honeycomb lattice... ")
+	nsite::Int8 = LLX * LLY * 2
+	number1neigh::Int8 = 3
+	println("[Lattice.jl] creating Honeycomb lattice... ")
 
 	scalex::Float64 = 2; scaley::Float64 = 4.0/sqrt(3)
 	t1 = [1.0 * scalex; 0]
 	t2 = [0.5 * scalex; sqrt(3)/2.0 * scaley]
 
-	indx_ = Vector{Int8}(undef, Nsite)  # x coordinate of sites
-	indy_ = Vector{Int8}(undef, Nsite)  # y coordinate of sites
+	indx_ = Vector{Int8}(undef, nsite)  # x coordinate of sites
+	indy_ = Vector{Int8}(undef, nsite)  # y coordinate of sites
 	mesh_ = fill!(Matrix{Int8}(undef, LLX*2+LLY,LLY*2),0)  # lattice on meshgrid
-	nn_ = Matrix{Int8}(undef, Nsite, number1neigh)  # nearest neighbors
+	nn_ = Matrix{Int8}(undef, nsite, number1neigh)  # nearest neighbors
 	
 	# ---------------- Construct Lattice mesh ------------------------ 
 	# ---------------- Construct Lattice mesh ------------------------ 
@@ -29,7 +29,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 		xa::Int8 = xv; xb::Int8 = xv + 1
 		ya::Int8 = 1; yb::Int8 = 2
 		
-		for j in 1:LLY
+		for j::Int8 in 1:LLY
 			indx_[counter] = xa
 			indy_[counter] = ya
 			mesh_[xa,ya] = counter
@@ -51,16 +51,16 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 	# ------------ Construct matrix of 1st n.n.s --------------------- 
 	# ------------ Construct matrix of 1st n.n.s --------------------- 
 	# ------------ Construct matrix of 1st n.n.s --------------------- 
-	println("Looking for nearest neighbors... ")
+	println("[Lattice.jl] Looking for nearest neighbors... ")
 	xmax = findmax(indx_)[1]   # findmax returns both max value and its index
 	ymax = findmax(indy_)[1]
 	
-	for i in 1:Nsite
+	for i::Int8 in 1:nsite
 		ix::Int8 = indx_[i]  # coordinate of n-th site in matrix
 		iy::Int8 = indy_[i]
 				
 		#----------------------------OBC-----------------------------------
-		#  n.n in x-bond
+		# n.n in x-bond
 		jx::Int8 = ix + 1; jy::Int8 = iy + 1  # move 1 step forward in x = (1,1) direction
 		if jx <= xmax && jy <= ymax && mesh_[jx,jy] != 0
 			j = mesh_[jx,jy]  # site index of n.n. in x direction
@@ -68,7 +68,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 			nn_[j,1] = i 	
 		end
 	
-		#  n.n in y-bond
+		# n.n in y-bond
 		jx = ix + 1; jy = iy - 1  # move 1 step in y = (1,-1) direction		
 		if jx <= xmax && jy <= ymax && jy >= 1 && mesh_[jx,jy] != 0
 			j = mesh_[jx,jy]  # site index of n.n. in x direction
@@ -76,7 +76,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 			nn_[j,2] = i 	
 		end	
 				
-		#  n.n in z-bond
+		# n.n in z-bond
 		jx = ix; jy = iy + 1  # move 1 step in z = (0,1) direction		
 		if jx <= xmax && jy <= ymax && mesh_[jx,jy] != 0
 			j = mesh_[jx,jy]  # site index of n.n. in x direction
@@ -109,11 +109,11 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 	
 	end
 	
-	return mesh_, nn_
+	return nsite, mesh_, nn_, indx_, indy_
 
 end
 
-mesh_, nn_ = Honeycomb(2,2,"PBC")	
+#mesh_, nn_ = Honeycomb(2,2,"PBC")	
 #show(stdout, "text/plain", nn_); println()
 #show(stdout, "text/plain", mesh_); println()
 
