@@ -111,7 +111,7 @@ function Hamiltonian(LLX, LLY, BC::String = "OBC")
 		ia::Int8 = KxxPair_[i,1]
 		ib::Int8 = KxxPair_[i,2]
 		coef::Float64 = Kxxcoef_[i]
-		println("x-x: ia=",ia,", ib=",ib,", coef=",coef)
+		# println("x-x: ia=",ia,", ib=",ib,", coef=",coef)
 		ida::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(ia-1),2^(ia-1))
 		idm::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(ib-ia-1),2^(ib-ia-1))
 		idb::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(nsite-ib),2^(nsite-ib))		
@@ -122,7 +122,7 @@ function Hamiltonian(LLX, LLY, BC::String = "OBC")
 		ia::Int8 = KyyPair_[i,1]
 		ib::Int8 = KyyPair_[i,2]
 		coef::Float64 = Kyycoef_[i]
-		println("y-y: ia=",ia,", ib=",ib,", coef=",coef)
+		# println("y-y: ia=",ia,", ib=",ib,", coef=",coef)
 		ida::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(ia-1),2^(ia-1))
 		idm::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(ib-ia-1),2^(ib-ia-1))
 		idb::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(nsite-ib),2^(nsite-ib))
@@ -133,7 +133,7 @@ function Hamiltonian(LLX, LLY, BC::String = "OBC")
 		ia::Int8 = KzzPair_[i,1]
 		ib::Int8 = KzzPair_[i,2]
 		coef::Float64 = Kzzcoef_[i]
-		println("z-z: ia=",ia,", ib=",ib,", coef=",coef)
+		# println("z-z: ia=",ia,", ib=",ib,", coef=",coef)
 		ida::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(ia-1),2^(ia-1))
 		idm::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(ib-ia-1),2^(ib-ia-1))
 		idb::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(nsite-ib),2^(nsite-ib))
