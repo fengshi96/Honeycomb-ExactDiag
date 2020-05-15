@@ -14,7 +14,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 	indx_ = Vector{Int8}(undef, nsite)  # x coordinate of sites
 	indy_ = Vector{Int8}(undef, nsite)  # y coordinate of sites
 	mesh_ = fill!(Matrix{Int8}(undef, LLX*2+LLY,LLY*2),0)  # lattice on meshgrid
-	nn_ = Matrix{Int8}(undef, nsite, number1neigh)  # nearest neighbors
+	nn_ = fill!(Matrix{Int8}(undef, nsite, number1neigh),0)  # nearest neighbors
 	
 	# ---------------- Construct Lattice mesh ------------------------ 
 	# ---------------- Construct Lattice mesh ------------------------ 
@@ -47,6 +47,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 										
 		end		
 	end
+	show(stdout, "text/plain", mesh_); println()
 
 	# ------------ Construct matrix of 1st n.n.s --------------------- 
 	# ------------ Construct matrix of 1st n.n.s --------------------- 
@@ -109,6 +110,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 	
 	end
 	
+	show(stdout, "text/plain", nn_); println()
 	return nsite, mesh_, nn_, indx_, indy_
 
 end
