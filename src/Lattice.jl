@@ -1,6 +1,10 @@
 using LinearAlgebra
+include("Parameter.jl")
 
-function Honeycomb(LLX, LLY, BC::String = "OBC")
+function Honeycomb(param::Parameter)
+	LLX = param.LLX; LLY = param.LLY
+	IsPeriodicX = param.IsPeriodicX
+	IsPeriodicY = param.IsPeriodicY
 
 	#LLX = 2; LLY = 2
 	nsite::Int8 = LLX * LLY * 2
@@ -88,7 +92,7 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 		
 		
 		#--------------------------Apply PBC-------------------------------	
-		if BC == "PBC"
+		if IsPeriodicY == true
 			# z-bond
 			jx = ix - LLY 
 			jy = 1
@@ -97,7 +101,9 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 				nn_[i,3] = j
 				nn_[j,3] = i
 			end
+		end
 			
+		if IsPeriodicX == true
 			# y-bond
 			jx = ix + 2 * LLX - 1 
 			jy = iy + 1
@@ -115,7 +121,8 @@ function Honeycomb(LLX, LLY, BC::String = "OBC")
 
 end
 
-#mesh_, nn_ = Honeycomb(2,2,"PBC")	
+#para = GetParameter("../input.inp")
+#nsite, mesh_, nn_, indx_, indy_ = Honeycomb(para)	
 #show(stdout, "text/plain", nn_); println()
 #show(stdout, "text/plain", mesh_); println()
 

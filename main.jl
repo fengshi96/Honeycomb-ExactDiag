@@ -2,10 +2,13 @@ using SparseArrays
 using LinearAlgebra
 using Arpack
 include("src/Hamiltonian.jl")
+include("src/Parameter.jl")
 
-LLX = 2; LLY = 2
-@time Ham = Hamiltonian(LLX,LLY,"PBC")
-@time eigvals, eigvecs = eigs(Ham, nev = 2, which=:SR) # SR = Smallest Real
+
+param = GetParameter("input.inp")
+Nstates = param.Nstates
+@time Ham = Hamiltonian(param)
+@time eigvals, eigvecs = eigs(Ham, nev = Nstates, which=:SR) # SR = Smallest Real
 
 println("\nEigen values:"); show(stdout, "text/plain", real.(eigvals)); println()
 

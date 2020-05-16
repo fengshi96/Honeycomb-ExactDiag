@@ -3,10 +3,18 @@ using SparseArrays
 using Arpack
 include("Lattice.jl")
 include("Dofs.jl")
+include("Parameter.jl")
 
-function Hamiltonian(LLX, LLY, BC::String = "OBC")
-	Kzz = 1; Kyy = 1; Kxx = 1 ##########################change later
-	nsite, mesh_, nn_, indx_, indy_= Honeycomb(LLX,LLY,BC)
+function Hamiltonian(param::Parameter)  #LLX, LLY, BC::String = "OBC"
+
+	Kxx::Float64 = param.Kxx 
+	Kyy::Float64 = param.Kyy 
+	Kzz::Float64 = param.Kzz
+	Hx::Float64 = param.Hx 
+	Hy::Float64 = param.Hy
+	Hz::Float64 = param.Hz
+	
+	nsite, mesh_, nn_, indx_, indy_= Honeycomb(param)
 	KxxGraph_ = fill!(Matrix{Float64}(undef, nsite, nsite),0)
 	KyyGraph_ = fill!(Matrix{Float64}(undef, nsite, nsite),0)
 	KzzGraph_ = fill!(Matrix{Float64}(undef, nsite, nsite),0)
@@ -90,11 +98,11 @@ function Hamiltonian(LLX, LLY, BC::String = "OBC")
 		end
 	end
 
-	#show(stdout, "text/plain", KxxPair_); println()
-
 
 	# ---------------------Build Hamiltonian as Sparse Matrix-------------------
 	# ---------------------Build Hamiltonian as Sparse Matrix-------------------
+	# ---------------------Build Hamiltonian as Sparse Matrix-------------------
+	
 	println("[Hamiltonian.jl] Building Hamiltonian as Sparse Matrix...")
 	sx::SparseMatrixCSC{Complex{Float64},Int8} = Sx()
 	sy::SparseMatrixCSC{Complex{Float64},Int8} = Sy()
@@ -141,13 +149,25 @@ function Hamiltonian(LLX, LLY, BC::String = "OBC")
 	end
 
 	Ham = Hamx + Hamy + Hamz
-	#println(Ham)
+	
+	
+	# --------------------------- Add external field -------------------------
+	
+	for i::Int8 in 1:nsite
+		ida::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(i-1),2^(i-1))
+		idb::SparseMatrixCSC{Complex{Float64},Int64} = sparse(I,2^(nsite-i),2^(nsite-i))
+		Ham += kron(ida, sx, idb)*Hx
+		Ham += kron(ida, sy, idb)*Hy
+		Ham += kron(ida, sz, idb)*Hz
+	end
+	
+	
 	return Ham
 
 
 end
 
-Ham = Hamiltonian(2,1,"PBC")
+#Ham = Hamiltonian(2,1,"PBC")
 #eigvals, eigvecs = eigs(Ham, nev = 4, which=:SR)
 #println(eigvals)
 #show(stdout, "text/plain", nn_); println()
