@@ -71,8 +71,9 @@ function Hamiltonian(param::Parameter)  #LLX, LLY, BC::String = "OBC"
 			end		
 		end
 	end
+	#println("KxxPair_:"); show(stdout, "text/plain", KxxPair_); println()
 	
-	# extract non-zero x-coupling pairs 
+	# extract non-zero y-coupling pairs 
 	counter = 1
 	for i::Int8 in 1:nsite
 		for j::Int8 in i:nsite
@@ -85,7 +86,8 @@ function Hamiltonian(param::Parameter)  #LLX, LLY, BC::String = "OBC"
 		end
 	end
 
-	# extract non-zero x-coupling pairs 
+	#println("KyyPair_:"); show(stdout, "text/plain", KyyPair_); println()
+	# extract non-zero z-coupling pairs 
 	counter = 1
 	for i::Int8 in 1:nsite
 		for j::Int8 in i:nsite
@@ -97,7 +99,7 @@ function Hamiltonian(param::Parameter)  #LLX, LLY, BC::String = "OBC"
 			end	
 		end
 	end
-
+	#println("KzzPair_:"); show(stdout, "text/plain", KzzPair_); println()
 
 	# ---------------------Build Hamiltonian as Sparse Matrix-------------------
 	# ---------------------Build Hamiltonian as Sparse Matrix-------------------

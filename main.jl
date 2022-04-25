@@ -1,6 +1,6 @@
 using SparseArrays
 using LinearAlgebra
-using Arpack
+#using Arpack
 include("src/Hamiltonian.jl")
 include("src/Parameter.jl")
 
